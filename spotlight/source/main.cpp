@@ -20,7 +20,7 @@ int main(){
     oam_init(oam_mem, 128);
     OBJ_ATTR* spotlight = obj_set_attr(
         &oam_mem[0], 
-        ATTR0_SQUARE | ATTR0_BLEND | ATTR0_Y(32),
+        ATTR0_SQUARE | ATTR0_BLEND | ATTR0_HIDE | ATTR0_Y(32),
 		ATTR1_SIZE_64 | ATTR1_X(32), 
         ATTR2_PRIO(0) | 1
     );
@@ -32,16 +32,16 @@ int main(){
     REG_DISPCNT = DCNT_BG0 | DCNT_OBJ | DCNT_OBJ_1D | DCNT_MODE0;
 
     
-    int fade = 0;
+    int strength = 0x80;
 
-    REG_BLDALPHA = BLDA_BUILD(0, 0);
+    REG_BLDALPHA = BLDA_BUILD(strength/8, 0);
     REG_BLDCNT= BLD_BUILD(
 		BLD_OBJ,	// Top
 		BLD_BG0,	// Bottom
 		1
     );
     
-    bool active = true;
+    bool active = false;
 
     while(1){
 
@@ -58,10 +58,9 @@ int main(){
 
         obj_copy(obj_mem, spotlight, 1);
 
-        fade = wrap(fade + 1, 0, 512);
-        u16 pulse = sin_lut[fade] > 0 ? ((u16)(sin_lut[fade]))>>8 : ((u16)(-1*sin_lut[fade]))>>8;
+        strength = clamp(strength + (active ? 1 : -1) , 0, 512);
 
-        REG_BLDALPHA = BLDA_BUILD(pulse+1, 0);
+        REG_BLDALPHA = BLDA_BUILD(strength/8, 0);
 
         //poll what keys are down
         key_poll();
