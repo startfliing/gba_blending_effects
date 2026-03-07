@@ -5,8 +5,6 @@
 
 int main(){
 
-    //day = BG0 pal[0] sbb 16 cbb 0
-    //night = BG1 pal[1] sbb 17 cbb 1
     REG_BG0CNT = BG_BUILD(0, 15, 0, 0, 1, 0, 0);
     REG_BG1CNT = BG_BUILD(2, 31, 0, 0, 1, 0, 0);
     
