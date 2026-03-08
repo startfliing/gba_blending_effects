@@ -58,7 +58,7 @@ int main(){
 
         obj_copy(obj_mem, spotlight, 1);
 
-        strength = clamp(strength + (active ? 1 : -1) , 0, 512);
+        strength = clamp(strength + (active ? 1 : -1) , 0, 129);
 
         REG_BLDALPHA = BLDA_BUILD(strength/8, 0);
 
